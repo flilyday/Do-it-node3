@@ -1,0 +1,29 @@
+{
+  "name": "strawberry",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flilyday/Do-it-node3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flilyday/Do-it-node3/issues"
+  },
+  "homepage": "https://github.com/flilyday/Do-it-node3#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "express-error-handler": "^1.1.0",
+    "express-session": "^1.17.1",
+    "http": "0.0.1-security",
+    "path": "^0.12.7",
+    "serve-static": "^1.14.1"
+  }
+}
