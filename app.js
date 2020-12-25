@@ -8,7 +8,28 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var expressSession = require('express-session');
 
+// 에러 핸들러 모듈 사용
 var expressErrorHandler = require('express-error-handler');
+
+// mongodb 모듈 사용
+var MongoClient = require('mongodb').MongoClient;
+
+var database
+
+function connectDB() {
+    var databaseUrl = 'mongodb://localhost:27017/local';
+
+    MongoClient.connect(databaseUrl, function(err, db){
+        if (err) {
+            console.log('데이터베이스 연결 시 에러 발생함');
+            return
+        }
+
+        console.log('데이터베이스에 연결됨 : ' + databaseUrl);
+        database = db;
+    });
+}
+
 
 var app = express();
 
@@ -37,4 +58,5 @@ var errorHandler = expressErrorHandler({
 
 var server = http.createServer(app).listen(app.get('port'), function(){
     console.log('express함수를 실행함 : ' + app.get('port'))
+    connectDB();
 })
