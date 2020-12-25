@@ -87,6 +87,47 @@ router.route('/process/login').post(function(req, res){
     }
 });
 
+router.route('/process/adduser').post(function(req, res){
+    console.log('/process/adduser 사용자 추가 함수가 호출됨');
+
+    var paramId = req.body.id || req.query.id;
+    var paramPassword = req.body.password || req.query.password;
+    var paramName = req.body.name || req.query.name;
+
+    console.log('요청 파라미터 : ' + paramId + ', ' + paramPassword + ', ' + paramName);
+
+    if(database) { 
+        addUser(database, paramId, paramPassword, paramName, 
+            function(err, result) {
+                if (err) {
+                    console.log('에러 발생');
+                    res.writeHead(200, {"Content-type":"text/html;charset=utf-8"})
+                    res.write('<h1>에러 발생</h1>')
+                    res.end();
+                    return;
+                }
+                if (result) {
+                    console.dir(result);
+                    res.writeHead(200, {"Content-type":"text/html;charset=utf-8"})
+                    res.write('<h1>사용자 추가 성공</h1>')
+                    res.write('<div><p>사용자 : ' + paramName + '</p></div>');
+                    res.end();
+                } else {
+                    console.log('사용자 추가 안됨');
+                    res.writeHead(200, {"Content-type":"text/html;charset=utf-8"});
+                    res.write('<h1>사용자 추가 안됨</h1>');
+                    res.end();
+                }
+            })
+    } else {
+        console.log('데이터베이스 연결 안됨');
+        res.writeHead(200, {"Content-type":"text/html;charset=utf-8"});
+        res.write('<h1>데이터베이스 연결 안됨</h1>');
+        res.end();
+    }
+})
+
+
 app.use('/', router);
 
 var authUser = function(db, id, password, callback) {
@@ -109,6 +150,32 @@ var authUser = function(db, id, password, callback) {
     });
 
 };
+
+var addUser = function(db, id, password, name, callback) {
+
+    console.log('addUser함수 호출됨 : ' + id + ',' + password + ',' + name);
+
+    var users = db.collection('users');
+
+    users.insertMany([{
+        'id' : id,
+        'password' : password,
+        'name' : name
+    }], function(err, result){
+        if(err) {
+            callback(err, null)
+            return;
+        }
+        if(result.insertedCount > 0){
+            console.log('사용자 추가됨 : ' + result.insertedCount);
+            callback(null, result)
+        } else {
+            console.log('추가된 레코드가 없음');
+            callback(null, null);
+        }
+    });
+};
+
 
 var errorHandler = expressErrorHandler({
     static : {
