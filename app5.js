@@ -54,7 +54,7 @@ function connectDB() {
             if(inSalt) {
                 return crypto.createHmac('sha1', inSalt).update(plainText).digest('hex');
             } else {
-                return crypto.createHmac('sha1', this.salt).update(plainText).digest('hext')
+                return crypto.createHmac('sha1', this.salt).update(plainText).digest('hex')
             };
         });
 
